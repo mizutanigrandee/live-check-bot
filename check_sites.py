@@ -163,55 +163,40 @@ def send_slack_message(text):
         print(f"Slack post error: {e}")
 
 def detect_new_lines(url, found_data):
-    """
-    1. サイトのHTMLを取得
-    2. キーワードを含む行だけ抽出
-    3. 既にfound_dataに登録されていない行だけ返す
-    """
-    new_lines = []
+    new_keywords = []
     try:
         resp = requests.get(url, timeout=10)
         resp.raise_for_status()
         lines = resp.text.split("\n")
 
         for line in lines:
+            line_lower = line.lower()
             for kw in KEYWORDS:
-                if kw in line:
-                    # キーワードを含む行が見つかった
-                    # すでに登録済みでないなら新行とみなす
-                    if line not in found_data.get(url, []):
-                        new_lines.append(line.strip())
-                    break
+                if kw.lower() in line_lower:
+                    # すでにfound_data[url]にkwがあればスキップ
+                    already_found = found_data.get(url, [])
+                    if kw not in already_found:
+                        new_keywords.append(kw)
+                    # break or not break is optional 
     except Exception as e:
         print(f"[ERROR] {url} - {e}")
-    return new_lines
+    return new_keywords
 
+# 通知部分
 if __name__ == "__main__":
-    # 1) 保存データをロード
     found_data = load_found_snippets()
 
-    # 2) 各サイトをチェック
     for url in SITES:
-        # URLからアーティスト名を取得
-        artist_name = ARTIST_MAP.get(url, "アーティスト不明")
-
-        newly_found_lines = detect_new_lines(url, found_data)
-        if newly_found_lines:
-            # 新しい行が見つかったら通知
-            for line in newly_found_lines:
-                msg = (
-                    f"【新ライブ情報？】\n"
-                    f"アーティスト: {artist_name}\n"
-                    f"URL: {url}\n"
-                    f"該当行: {line}"
-                )
+        newly_found_keywords = detect_new_lines(url, found_data)
+        if newly_found_keywords:
+            for kw in newly_found_keywords:
+                msg = f"【新ライブ情報】\nURL: {url}\nキーワード: {kw}"
                 print(msg)
                 send_slack_message(msg)
 
-            # found_dataに追加
+            # 追加保存
             if url not in found_data:
                 found_data[url] = []
-            found_data[url].extend(newly_found_lines)
+            found_data[url].extend(newly_found_keywords)
 
-    # 3) 更新したデータを保存
     save_found_snippets(found_data)
