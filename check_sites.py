@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 
 # 監視したいサイトURLのリスト
 SITES = [
@@ -57,23 +58,37 @@ SITES = [
     "https://ini-official.com/",
     "https://da-ice.jp/",
     "https://tobe-official.jp/artists/number_i",
-
 ]
 
-KEYWORDS = ["京セラドーム", "ヤンマースタジアム", "kyocera", "大阪城ホール"]
+# 検知したいキーワード
+KEYWORDS = ["京セラドーム", "ヤンマースタジアム", "kyocera", ]
 
-def check_site(url):
+def load_found_snippets():
+    """
+    過去に検出した行情報を found_snippets.json から読み込む。
+    ファイルが無い or 壊れている時は空のデータを返す。
+    
+    形式: {
+      "URL": [
+        "検出済みの行1",
+        "検出済みの行2",
+        ...
+      ],
+      ...
+    }
+    """
     try:
-        resp = requests.get(url, timeout=10)
-        resp.raise_for_status()
-        html = resp.text
-        for kw in KEYWORDS:
-            if kw in html:
-                return kw
-        return None
-    except Exception as e:
-        print(f"[ERROR] {url} - {e}")
-        return None
+        with open("found_snippets.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+def save_found_snippets(data):
+    """
+    found_snippets.json に書き込む
+    """
+    with open("found_snippets.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 def send_slack_message(text):
     webhook_url = os.environ.get("SLACK_WEBHOOK_URL")
@@ -89,10 +104,51 @@ def send_slack_message(text):
     except Exception as e:
         print(f"Slack post error: {e}")
 
+def detect_new_lines(url, found_data):
+    """
+    1. サイトのHTMLを取得
+    2. キーワードを含む行だけ抽出
+    3. 既にfound_dataに登録されていない行だけ返す
+    """
+    new_lines = []
+    try:
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+        lines = resp.text.split("\n")
+
+        for line in lines:
+            for kw in KEYWORDS:
+                if kw in line:
+                    # キーワードを含む行が見つかった
+                    # 既に登録済みか確認
+                    # (※行の長さが異常に長い場合、通知が冗長になる可能性あり)
+                    if line not in found_data.get(url, []):
+                        new_lines.append(line.strip())
+                    break  # 一つでもヒットすれば次の行へ
+
+    except Exception as e:
+        print(f"[ERROR] {url} - {e}")
+    return new_lines
+
 if __name__ == "__main__":
+    # 過去検出データを読み込み
+    found_data = load_found_snippets()  # dict
+
+    # 各サイトを巡回し、新しい行があれば通知
     for url in SITES:
-        found = check_site(url)
-        if found:
-            message = f"【ライブ情報検知】{url} にて '{found}' が見つかりました！"
-            print(message)
-            send_slack_message(message)
+        newly_found_lines = detect_new_lines(url, found_data)
+        if newly_found_lines:
+            # Slack通知 & found_data に追記
+            for line in newly_found_lines:
+                msg = f"【新ライブ情報？】\nURL: {url}\n該当行: {line}"
+                print(msg)
+                send_slack_message(msg)
+
+            # 記録に追加
+            if url not in found_data:
+                found_data[url] = []
+            found_data[url].extend(newly_found_lines)
+
+    # 更新したfound_dataを保存
+    save_found_snippets(found_data)
+
