@@ -1,26 +1,50 @@
 name: Check Sites
 
 on:
+  # 毎時0分に、UTCの22時～23時と0時～14時に実行
+  # （= 日本時間7:00～23:00の毎時0分）※24時(=翌0時)は含まれません
   schedule:
-    - cron: "0,30 * * * *"   
-  workflow_dispatch:         
+    - cron: "0 22-23 * * *"
+    - cron: "0 0-14 * * *"
+
+  # 手動実行用
+  workflow_dispatch:
 
 jobs:
   check_job:
     runs-on: ubuntu-latest
+
+    # リポジトリへのファイル書き込みを許可
+    permissions:
+      contents: write
+
     steps:
+      # 1. リポジトリをチェックアウト
       - name: Check out code
         uses: actions/checkout@v3
 
+      # 2. Pythonをセットアップ
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
+      # 3. 依存ライブラリrequestsをインストール
       - name: Install dependencies
         run: pip install requests
 
+      # 4. スクリプト実行
       - name: Run check script
         run: python check_sites.py
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      # 5. 変更のあった found_snippets.json をコミット＆プッシュ
+      - name: Commit updated found_snippets.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add found_snippets.json
+          git commit -m "Update found_snippets.json" || echo "No changes to commit."
+          git push
