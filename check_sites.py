@@ -120,7 +120,7 @@ SITES = [
 ]
 
 # 検知したいキーワード
-KEYWORDS = ["京セラドーム", "ヤンマースタジアム", "kyocera"]
+KEYWORDS = ["京セラドーム", "ヤンマースタジアム", "大阪","kyocera","osaka"]
 
 def load_found_snippets():
     """
