@@ -3,7 +3,6 @@ import os
 import json
 
 # URL → アーティスト名 の辞書
-# ※  "キー": "値"  の形式で書く必要があります
 ARTIST_MAP = {
     "https://concert24-25.jp/s/kkt/?ima=0651": "キンキキッズ",
     "https://bz-vermillion.com/": "B'z",
@@ -182,15 +181,24 @@ def detect_new_lines(url, found_data):
         print(f"[ERROR] {url} - {e}")
     return new_keywords
 
-# 通知部分
 if __name__ == "__main__":
     found_data = load_found_snippets()
 
     for url in SITES:
         newly_found_keywords = detect_new_lines(url, found_data)
+
         if newly_found_keywords:
+            # ARTIST_MAPからアーティスト名を取得
+            artist_name = ARTIST_MAP.get(url, "アーティスト不明")
+
             for kw in newly_found_keywords:
-                msg = f"【新ライブ情報】\nURL: {url}\nキーワード: {kw}"
+                # アーティスト名を含めてメッセージを作成
+                msg = (
+                    f"【新ライブ情報】\n"
+                    f"アーティスト: {artist_name}\n"
+                    f"URL: {url}\n"
+                    f"キーワード: {kw}"
+                )
                 print(msg)
                 send_slack_message(msg)
 
