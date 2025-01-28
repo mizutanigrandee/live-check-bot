@@ -25,7 +25,7 @@ ARTIST_MAP = {
     "https://txt-official.jp/": "TXT",
     "https://www.straykidsjapan.com/": "Stray Kids",
     "https://mentrecording.jp/snowman/": "Snow Man",
-    "https://befirst.tokyo/": "BE:FIRST",
+    "https://befirst.tokyo/news/": "BE:FIRST",
     "https://www.sixtones.jp/": "SixTONES",
     "https://reissuerecords.net/": "米津玄師",
     "https://vaundy.jp/": "Vaundy",
@@ -39,13 +39,13 @@ ARTIST_MAP = {
     "https://higedan.com/": "Official髭男dism",
     "https://www.universal-music.co.jp/ado/": "Ado",
     "https://yuzu-official.com/": "ゆず",
-    "https://www.oneokrock.com/jp/": "ONE OK ROCK",
+    "https://www.oneokrock.com/jp/news": "ONE OK ROCK",
     "https://www.twicejapan.com/": "TWICE",
     "https://sudamasaki-music.com/": "菅田将暉",
     "https://fmsp.amob.jp/mob/index.php?site=F&ima=4103": "福山雅治",
     "https://fujiikaze.com/": "藤井風",
     "https://dreamscometrue.com/": "DREAMS COME TRUE",
-    "https://tobe-official.jp/": "TOBE",
+    "https://tobe-official.jp/news": "TOBE",
     "https://starto.jp/s/p/artist/41": "King & Prince",
     "https://www.glay.co.jp/": "GLAY",
     "https://larc-en-ciel.com/index.php": "L'Arc～en～Ciel",
@@ -58,6 +58,7 @@ ARTIST_MAP = {
     "https://ini-official.com/": "INI",
     "https://da-ice.jp/": "Da-iCE",
     "https://tobe-official.jp/artists/number_i": "NUMBER I"
+    "https://starto.jp/?ima=4916": "旧ジャニーズ"
 }
 
 # 監視したいサイトURLのリスト
@@ -83,7 +84,7 @@ SITES = [
     "https://txt-official.jp/",
     "https://www.straykidsjapan.com/",
     "https://mentrecording.jp/snowman/",
-    "https://befirst.tokyo/",
+    "https://befirst.tokyo/news/",
     "https://www.sixtones.jp/",
     "https://reissuerecords.net/",
     "https://vaundy.jp/",
@@ -97,13 +98,13 @@ SITES = [
     "https://higedan.com/",
     "https://www.universal-music.co.jp/ado/",
     "https://yuzu-official.com/",
-    "https://www.oneokrock.com/jp/",
+    "https://www.oneokrock.com/jp/news",
     "https://www.twicejapan.com/",
     "https://sudamasaki-music.com/",
     "https://fmsp.amob.jp/mob/index.php?site=F&ima=4103",
     "https://fujiikaze.com/",
     "https://dreamscometrue.com/",
-    "https://tobe-official.jp/",
+    "https://tobe-official.jp/news",
     "https://starto.jp/s/p/artist/41",
     "https://www.glay.co.jp/",
     "https://larc-en-ciel.com/index.php",
@@ -116,6 +117,7 @@ SITES = [
     "https://ini-official.com/",
     "https://da-ice.jp/",
     "https://tobe-official.jp/artists/number_i",
+    "https://starto.jp/?ima=4916",
 ]
 
 # 検知したいキーワード
