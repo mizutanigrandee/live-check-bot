@@ -57,7 +57,7 @@ ARTIST_MAP = {
     "https://nct-jp.net/": "NCT",
     "https://ini-official.com/": "INI",
     "https://da-ice.jp/": "Da-iCE",
-    "https://tobe-official.jp/artists/number_i": "NUMBER I"
+    "https://tobe-official.jp/artists/number_i": "NUMBER I",
     "https://starto.jp/?ima=4916": "旧ジャニーズ"
 }
 
