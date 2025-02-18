@@ -21,7 +21,7 @@ ARTIST_MAP = {
     "https://niziu.com/s/n123/?ima=1717": "NiziU",
     "https://infinity-r.jp/": "∞(スーパーエイト?)",
     "https://enhypen-jp.weverse.io/": "ENHYPEN",
-    "https://www.seventeen-17.jp/": "SEVENTEEN",
+    "https://www.seventeen-17.jp/posts/information": "SEVENTEEN",
     "https://txt-official.jp/": "TXT",
     "https://www.straykidsjapan.com/": "Stray Kids",
     "https://mentrecording.jp/snowman/": "Snow Man",
