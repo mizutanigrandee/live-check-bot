@@ -80,7 +80,7 @@ SITES = [
     "https://niziu.com/s/n123/?ima=1717",
     "https://infinity-r.jp/",
     "https://enhypen-jp.weverse.io/",
-    "https://www.seventeen-17.jp/",
+    "https://www.seventeen-17.jp/posts/information",
     "https://txt-official.jp/",
     "https://www.straykidsjapan.com/",
     "https://mentrecording.jp/snowman/",
