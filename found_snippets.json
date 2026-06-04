@@ -100,7 +100,8 @@
     "大阪"
   ],
   "https://ini-official.com/": [
-    "osaka"
+    "osaka",
+    "大阪"
   ],
   "https://bts-official.jp/": [
     "大阪",
@@ -110,6 +111,9 @@
     "大阪"
   ],
   "https://exo-jp.net/": [
+    "大阪"
+  ],
+  "https://starto.jp/s/p/artist/15": [
     "大阪"
   ]
 }
